@@ -67,8 +67,6 @@
 
       // Function to handle mouse move event to draw lines automatically
       function onMouseMove(event) {
-        console.log("lastDot", lastDot?.dataset?.id);
-
         if (lastDot) {
           const x = event.clientX - svg.getBoundingClientRect().left;
           const y = event.clientY - svg.getBoundingClientRect().top;
@@ -97,6 +95,14 @@
           if (currentLine) {
             currentLine.setAttribute("x2", x);
             currentLine.setAttribute("y2", y);
+            currentLine.setAttribute(
+              "x1",
+              parseFloat(lastDot.getAttribute("cx"))
+            );
+            currentLine.setAttribute(
+              "y1",
+              parseFloat(lastDot.getAttribute("cy"))
+            );
           } else {
             currentLine = document.createElementNS(
               "http://www.w3.org/2000/svg",
@@ -105,7 +111,6 @@
 
             currentLine.setAttribute("class", "line");
             currentLine.classList.add("orange");
-            currentLine.classList.add(".orange");
 
             currentLine.setAttribute(
               "x1",
@@ -124,9 +129,6 @@
 
       // Function to draw a line between two dots
       function drawLineToDot(dot, previousDot) {
-        console.log("dot ", dot.dataset.id);
-        console.log("previousDot", previousDot.dataset.id);
-
         if (previousDot !== dot) {
           const line = document.createElementNS(
             "http://www.w3.org/2000/svg",
