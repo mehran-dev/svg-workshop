@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SVG Lock Pattern with Automatic Drawing</title>
+    <style>
+      svg {
+        width: 300px; /* Set desired width */
+        height: 300px; /* Set desired height */
+        background-color: #f0f0f0; /* Background color */
+        cursor: pointer; /* Change cursor to pointer */
+      }
+      .dot {
+        fill: #3498db; /* Color of the dots */
+      }
+      .line {
+        stroke: #3498db; /* Color of the connecting lines */
+        stroke-width: 4; /* Thickness of the lines */
+        stroke-linecap: round; /* Round ends for smoother lines */
+      }
+    </style>
+  </head>
+  <body>
+    <svg viewBox="0 0 300 300" id="lockPattern">
+      <!-- Dots -->
+      <circle data-id="A1" class="dot" cx="50" cy="50" r="15" />
+      <circle data-id="A2" class="dot" cx="150" cy="50" r="15" />
+      <circle data-id="A3" class="dot" cx="250" cy="50" r="15" />
+      <circle data-id="B1" class="dot" cx="50" cy="150" r="15" />
+      <circle data-id="B2" class="dot" cx="150" cy="150" r="15" />
+      <circle data-id="B3" class="dot" cx="250" cy="150" r="15" />
+      <circle data-id="C1" class="dot" cx="50" cy="250" r="15" />
+      <circle data-id="C2" class="dot" cx="150" cy="250" r="15" />
+      <circle data-id="C3" class="dot" cx="250" cy="250" r="15" />
+
+      <!-- Lines will be drawn here -->
+    </svg>
+
+    <script>
+      const svg = document.getElementById("lockPattern");
+      let lastDot = null; // To store the last connected dot
+      let drawnDots = new Set(); // To keep track of already connected dots
+      let currentLine = null; // To store the currently drawn line
+
+      // Function to start drawing when a dot is clicked
+      function onDotClick(event) {
+        const dot = event.target;
+
+        // Only proceed if clicking on a dot and it's not already drawn
+        if (dot.classList.contains("dot") && !drawnDots.has(dot)) {
+          // If there's an existing line being drawn, draw to the new dot
+          if (lastDot) {
+            drawLineToDot(dot, lastDot); // Draw line to the clicked dot
+          }
+
+          // Update the lastDot to the clicked dot
+          lastDot = dot;
+          drawnDots.add(dot); // Mark this dot as drawn
+        }
+      }
+
+      // Function to handle mouse move event to draw lines automatically
+      function onMouseMove(event) {
+        if (lastDot) {
+          const x = event.clientX - svg.getBoundingClientRect().left;
+          const y = event.clientY - svg.getBoundingClientRect().top;
+
+          // Check if the mouse is over any dots
+          const dots = document.querySelectorAll(".dot");
+          dots.forEach((dot) => {
+            const dotX = parseFloat(dot.getAttribute("cx"));
+            const dotY = parseFloat(dot.getAttribute("cy"));
+
+            // Calculate distance from mouse to dot
+            const distance = Math.sqrt(
+              Math.pow(x - dotX, 2) + Math.pow(y - dotY, 2)
+            );
+
+            // If within a threshold distance and not already connected
+            if (distance < 15 && !drawnDots.has(dot) && dot !== lastDot) {
+              // Draw line to the new dot
+              drawLineToDot(dot, lastDot); // Draw line from last connected dot to this new dot
+              lastDot = dot; // Update lastDot to the newly connected dot
+              drawnDots.add(dot); // Mark this dot as drawn
+            }
+          });
+
+          // Update the current line's endpoint if it exists
+          if (currentLine) {
+            currentLine.setAttribute("x2", x);
+            currentLine.setAttribute("y2", y);
+          } else {
+            currentLine = document.createElementNS(
+              "http://www.w3.org/2000/svg",
+              "line"
+            );
+            currentLine.setAttribute("class", "line");
+            currentLine.setAttribute(
+              "x1",
+              parseFloat(lastDot.getAttribute("cx"))
+            );
+            currentLine.setAttribute(
+              "y1",
+              parseFloat(lastDot.getAttribute("cy"))
+            );
+            currentLine.setAttribute("x2", x);
+            currentLine.setAttribute("y2", y);
+            svg.appendChild(currentLine);
+          }
+        }
+      }
+
+      // Function to draw a line between two dots
+      function drawLineToDot(dot, previousDot) {
+        console.log("dot ", dot.dataset.id);
+        console.log("previousDot", previousDot.dataset.id);
+
+        if (previousDot !== dot) {
+          const line = document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "line"
+          );
+          line.setAttribute("class", "line");
+          line.setAttribute("x1", parseFloat(previousDot.getAttribute("cx")));
+          line.setAttribute("y1", parseFloat(previousDot.getAttribute("cy")));
+          line.setAttribute("x2", parseFloat(dot.getAttribute("cx")));
+          line.setAttribute("y2", parseFloat(dot.getAttribute("cy")));
+          svg.appendChild(line);
+        }
+      }
+
+      // Function to handle mouse up event
+      function onMouseUp() {
+        // Reset everything
+        if (currentLine) {
+          currentLine = null; // Reset current line
+        }
+        lastDot = null; // Reset last dot
+        drawnDots.clear(); // Clear drawn dots
+      }
+
+      // Add event listeners to the SVG dots and the main SVG
+      const dots = document.querySelectorAll(".dot");
+      dots.forEach((dot) => dot.addEventListener("click", onDotClick));
+      svg.addEventListener("mousemove", onMouseMove);
+      svg.addEventListener("mouseup", onMouseUp);
+      svg.addEventListener("mouseleave", onMouseUp); // Reset on mouse leave
+    </script>
+  </body>
+</html>
