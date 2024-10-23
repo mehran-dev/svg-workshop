@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SVG Perpendicular Bisector</title>
+    <style>
+      #canvas {
+        border: 1px solid #ccc;
+        width: 600px;
+        height: 400px;
+        position: relative;
+      }
+      .perpendicular {
+        stroke: red;
+        stroke-width: 2;
+        stroke-dasharray: 5, 5; /* Dashed line */
+      }
+    </style>
+  </head>
+  <body>
+    <div id="canvas">
+      <svg width="100%" height="100%" id="svgCanvas"></svg>
+    </div>
+    <button id="toggle">Toggle Perpendicular Bisector</button>
+
+    <script>
+      const svgCanvas = document.getElementById("svgCanvas");
+      let startPoint = null;
+      let endPoint = null;
+      let perpendicularState = 0; // 0: none, 1: left, 2: right, 3: both
+
+      svgCanvas.addEventListener("click", (event) => {
+        const rect = svgCanvas.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+
+        if (!startPoint) {
+          startPoint = { x, y };
+        } else if (!endPoint) {
+          endPoint = { x, y };
+          drawLine();
+          drawPerpendicularBisectors();
+        } else {
+          // Reset for a new line
+          startPoint = { x, y };
+          endPoint = null;
+          svgCanvas.innerHTML = ""; // Clear the SVG
+        }
+      });
+
+      document.getElementById("toggle").addEventListener("click", () => {
+        perpendicularState = (perpendicularState + 1) % 4; // Toggle between 0, 1, 2, 3
+        drawPerpendicularBisectors();
+      });
+
+      function drawLine() {
+        const line = document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "line"
+        );
+        line.setAttribute("x1", startPoint.x);
+        line.setAttribute("y1", startPoint.y);
+        line.setAttribute("x2", endPoint.x);
+        line.setAttribute("y2", endPoint.y);
+        line.setAttribute("stroke", "black");
+        line.setAttribute("stroke-width", "2");
+        svgCanvas.appendChild(line);
+      }
+
+      function drawPerpendicularBisectors() {
+        // Clear previous perpendicular bisectors
+        const existingPerpendiculars =
+          document.querySelectorAll(".perpendicular");
+        existingPerpendiculars.forEach((line) => line.remove());
+
+        if (!startPoint || !endPoint) return;
+
+        // Calculate midpoint
+        const midX = (startPoint.x + endPoint.x) / 2;
+        const midY = (startPoint.y + endPoint.y) / 2;
+
+        // Calculate the direction of the line
+        const dx = endPoint.x - startPoint.x;
+        const dy = endPoint.y - startPoint.y;
+
+        // Calculate the length of the line segment
+        const length = Math.sqrt(dx * dx + dy * dy);
+        const unitX = dx / length; // unit vector x
+        const unitY = dy / length; // unit vector y
+
+        // Perpendicular unit vector
+        const perpX = -unitY; // Rotate 90 degrees
+        const perpY = unitX;
+
+        const bisectorLength = 50; // Length of the perpendicular bisector
+
+        if (perpendicularState === 1 || perpendicularState === 3) {
+          // Draw left perpendicular bisector
+          drawPerpendicularBisector(
+            midX - perpX * bisectorLength,
+            midY - perpY * bisectorLength,
+            midX,
+            midY
+          );
+        }
+        if (perpendicularState === 2 || perpendicularState === 3) {
+          // Draw right perpendicular bisector
+          drawPerpendicularBisector(
+            midX + perpX * bisectorLength,
+            midY + perpY * bisectorLength,
+            midX,
+            midY
+          );
+        }
+      }
+
+      function drawPerpendicularBisector(endX, endY, midX, midY) {
+        const line = document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "line"
+        );
+        line.setAttribute("x1", midX);
+        line.setAttribute("y1", midY);
+        line.setAttribute("x2", endX);
+        line.setAttribute("y2", endY);
+        line.setAttribute("class", "perpendicular");
+        svgCanvas.appendChild(line);
+      }
+    </script>
+  </body>
+</html>

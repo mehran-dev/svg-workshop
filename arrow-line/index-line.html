@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interactive SVG Line with Arrow</title>
+    <style>
+      svg {
+        width: 400px;
+        height: 400px;
+        border: 1px solid black;
+        cursor: pointer;
+      }
+      .line {
+        stroke: #3498db;
+        stroke-width: 4;
+      }
+    </style>
+  </head>
+  <body>
+    <svg id="svgCanvas" viewBox="0 0 400 400">
+      <!-- Define Arrowhead Markers -->
+      <defs>
+        <!-- Right arrow (end) -->
+        <marker
+          id="arrowRight"
+          markerWidth="10"
+          markerHeight="10"
+          refX="10"
+          refY="3"
+          orient="auto"
+          markerUnits="strokeWidth"
+        >
+          <path d="M0,0 L0,6 L9,3 z" fill="#3498db" />
+        </marker>
+
+        <!-- Left arrow (start) -->
+        <marker
+          id="arrowLeft"
+          markerWidth="10"
+          markerHeight="10"
+          refX="0"
+          refY="3"
+          orient="auto"
+          markerUnits="strokeWidth"
+        >
+          <path d="M9,0 L9,6 L0,3 z" fill="#3498db" />
+        </marker>
+
+        <!-- Bidirectional arrow -->
+        <marker
+          id="arrowBoth"
+          markerWidth="10"
+          markerHeight="10"
+          refX="0"
+          refY="3"
+          orient="auto"
+          markerUnits="strokeWidth"
+        >
+          <path d="M9,0 L9,6 L0,3 z" fill="#3498db" />
+        </marker>
+      </defs>
+
+      <!-- Line will be drawn dynamically here -->
+    </svg>
+
+    <!-- Button to change arrow direction -->
+    <button id="toggleDirection">Change Direction</button>
+
+    <script>
+      const svg = document.getElementById("svgCanvas");
+      let startPoint = null;
+      let currentLine = null;
+      let arrowDirection = "right"; // default direction
+
+      // Toggle button to switch arrow directions
+      const toggleButton = document.getElementById("toggleDirection");
+      toggleButton.addEventListener("click", () => {
+        if (arrowDirection === "right") {
+          arrowDirection = "left";
+        } else if (arrowDirection === "left") {
+          arrowDirection = "both";
+        } else {
+          arrowDirection = "right";
+        }
+        updateArrowDirection(); // Update the direction of the current line
+      });
+
+      // Event listener to draw line on SVG click
+      svg.addEventListener("click", function (event) {
+        const svgPoint = getSVGPoint(event);
+
+        if (!startPoint) {
+          startPoint = svgPoint; // Set the starting point
+        } else {
+          drawLine(startPoint, svgPoint); // Draw the line between start and end
+          startPoint = null; // Reset the start point after drawing the line
+        }
+      });
+
+      // Get the mouse coordinates relative to the SVG
+      function getSVGPoint(event) {
+        const point = svg.createSVGPoint();
+        point.x = event.clientX;
+        point.y = event.clientY;
+        const svgPoint = point.matrixTransform(svg.getScreenCTM().inverse());
+        return svgPoint;
+      }
+
+      // Function to draw the line between two points
+      function drawLine(start, end) {
+        currentLine = document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "line"
+        );
+        currentLine.setAttribute("class", "line");
+        currentLine.setAttribute("x1", start.x);
+        currentLine.setAttribute("y1", start.y);
+        currentLine.setAttribute("x2", end.x);
+        currentLine.setAttribute("y2", end.y);
+        svg.appendChild(currentLine);
+        updateArrowDirection(); // Apply the correct arrow direction
+      }
+
+      // Function to update the arrow direction
+      function updateArrowDirection() {
+        if (!currentLine) return; // If no line has been drawn, do nothing
+
+        if (arrowDirection === "right") {
+          currentLine.setAttribute("marker-end", "url(#arrowRight)");
+          currentLine.removeAttribute("marker-start"); // Remove left arrow if exists
+        } else if (arrowDirection === "left") {
+          currentLine.setAttribute("marker-start", "url(#arrowLeft)");
+          currentLine.removeAttribute("marker-end"); // Remove right arrow if exists
+        } else if (arrowDirection === "both") {
+          currentLine.setAttribute("marker-end", "url(#arrowRight)");
+          currentLine.setAttribute("marker-start", "url(#arrowLeft)");
+        }
+      }
+    </script>
+  </body>
+</html>

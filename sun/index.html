@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Animated SVG Logo</title>
+    <style>
+      /* Add CSS for hover or animation effects */
+      svg {
+        width: 100%;
+        height: auto;
+      }
+
+      #sun {
+        transform-origin: center;
+        animation: rotate 5s linear infinite;
+      }
+
+      @keyframes rotate {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      #wave {
+        fill: none;
+        stroke: #00aaff;
+        stroke-width: 3;
+        animation: waveMove 4s linear infinite;
+      }
+
+      @keyframes waveMove {
+        from {
+          transform: translateX(0);
+        }
+        to {
+          transform: translateX(-100px);
+        }
+      }
+
+      @keyframes fly {
+        0% {
+          transform: translate(0, 0);
+        }
+        50% {
+          transform: translate(50px, -20px);
+        }
+        100% {
+          transform: translate(0, 0);
+        }
+      }
+
+      #button {
+        cursor: pointer;
+        fill: #007bff;
+        transition: fill 0.3s;
+      }
+
+      #button:hover {
+        fill: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      <circle id="sun" cx="100" cy="50" r="30" fill="yellow" />
+
+      <!-- Wave path -->
+      <path
+        id="wave"
+        d="
+          M 0 120 
+          Q 30 90, 60 120
+          Q 90 150, 120 120
+          Q 150 100, 180 120
+          Q 210 140, 240 120
+          Q 270 90, 300 120
+          Q 330 160, 360 120
+          Q 390 80, 420 120
+          Q 450 130, 480 120
+          Q 510 110, 540 120
+          Q 570 150, 600 120
+          Q 630 90, 660 120
+          Q 690 140, 720 120
+          Q 750 100, 780 120
+          Q 810 130, 840 120
+          Q 870 160, 900 120
+          Q 930 90, 960 120
+          Q 990 150, 1020 120
+          Q 1050 80, 1080 120
+          Q 1110 100, 1140 120
+          T 1200 120
+      "
+        fill="none"
+        stroke="#00aaff"
+        stroke-width="3"
+      />
+
+      <!-- Button -->
+      <g id="button">
+        <rect x="60" y="140" width="80" height="40" rx="10" ry="10" />
+        <text x="100" y="165" font-size="16" text-anchor="middle" fill="yellow">
+          Click Me
+        </text>
+      </g>
+    </svg>
+
+    <script>
+      // Add interactivity to the button group
+      const buttonGroup = document.getElementById("button");
+      buttonGroup.addEventListener("click", () => {
+        alert("You clicked the button!");
+      });
+    </script>
+  </body>
+</html>

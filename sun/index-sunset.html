@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Continuous Filled Wave</title>
+    <style>
+      svg {
+        width: 100%;
+        height: auto;
+      }
+
+      /* Continuous ocean wave animation */
+      .wave {
+        fill: #00aaff;
+        stroke: #00aaff;
+        stroke-width: 3;
+      }
+
+      .wave-1 {
+        animation: waveMove-1 5s linear infinite;
+      }
+      /* .wave-2 {
+        animation: waveMove-2 8s linear infinite;
+      } */
+
+      @keyframes waveMove-1 {
+        from {
+          transform: translateX(10px);
+        }
+        to {
+          transform: translateX(-60px);
+        }
+      }
+
+      @keyframes waveMove-2 {
+        from {
+          transform: translateX(-120px);
+        }
+        to {
+          transform: translateX(50px);
+        }
+      }
+
+      #sun {
+        transform-origin: center;
+        animation: sunset 8s ease-in-out infinite;
+      }
+
+      @keyframes sunset {
+        0% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(100px);
+        } /* Sun goes below the wave */
+        100% {
+          transform: translateY(0);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <svg viewBox="0 0 1200 200" xmlns="http://www.w3.org/2000/svg">
+      <!-- Sun -->
+      <circle id="sun" cx="600" cy="50" r="30" fill="yellow" />
+
+      <!-- First wave (filled) -->
+      <path
+        class="wave wave-1"
+        d="
+          M 0 120 
+          Q 60 80, 120 120 
+          T 240 120 
+          T 360 120 
+          T 480 120 
+          T 600 120
+          T 720 120
+          T 840 120
+          T 960 120
+          T 1080 120
+          T 1200 120
+          T 1320 120
+          T 1440 120
+          T 1560 120
+          T 1680 120
+          T 1800 120
+          T 1920 120
+          T 2040 120
+          T 2160 120
+          T 2280 120
+          V 200 H 0 Z
+      "
+      />
+
+      <path
+        class="wave wave-2"
+        d="
+        M 0 120 
+        Q 60 80, 120 120 
+        T 240 120 
+        T 360 120 
+        T 480 120 
+        T 600 120
+        T 720 120
+        T 840 120
+        T 960 120
+        T 1080 120
+        T 1200 120
+        T 1320 120
+        T 1440 120
+        T 1560 120
+        T 1680 120
+        T 1800 120
+        T 1920 120
+        T 2040 120
+        T 2160 120
+        T 2280 120
+        V 200 H 0 Z
+    "
+        transform="translate(1200, 0)"
+      />
+    </svg>
+  </body>
+</html>
