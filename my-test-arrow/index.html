@@ -27,10 +27,37 @@
       .end-marker {
         fill: yellowgreen;
       }
+      .opacity-30 {
+        opacity: 0.3;
+      }
     </style>
   </head>
   <body>
-    <svg id="svgCanvas" viewBox="0 0 400 400"></svg>
+    <svg id="svgCanvas" viewBox="0 0 400 400">
+      <defs>
+        <g id="myPolygon" transform="scale(0.35)">
+          <path
+            d="M46.967,0C21.029,0,0,21.028,0,46.967c0,25.939,21.029,46.967,46.967,46.967c25.939,0,46.967-21.027,46.967-46.967
+            C93.934,21.027,72.906,0,46.967,0z M55.953,66.295V54.3H18.652V39.634h37.303V27.639l19.326,19.328L55.953,66.295z"
+          />
+        </g>
+      </defs>
+
+      <line
+        x1="30"
+        y1="30"
+        x2="200"
+        y2="200"
+        style="stroke: red; stroke-width: 2"
+      />
+      <use
+        href="#myPolygon"
+        x="115"
+        y="115"
+        fill="blue"
+        transform="rotate(-45 115 115)"
+      />
+    </svg>
 
     <button id="toggleSide">Toggle Triangle Side</button>
 
@@ -51,185 +78,8 @@
         }
       });
 
-      /*   const drawKuft = (startPoint, endPoint) => {
-              //line ={start:{x,y} , end:{x,y}}
-
-              console.log("startPoint", startPoint);
-              console.log(" endPoint", endPoint);
-
-              const svg = document.getElementById("svgCanvas");
-
-              // Create a new circle element in the SVG namespace
-              let circle = document.createElementNS(
-                "http://www.w3.org/2000/svg",
-                "circle"
-              );
-
-              // Calculate midpoint between startPoint and endPoint
-              const cx = (startPoint.x + endPoint.x) / 2;
-              const cy = (startPoint.y + endPoint.y) / 2;
-
-              // Set attributes for the circle
-              circle.setAttribute("r", 5);
-              circle.setAttribute("cx", cx);
-              circle.setAttribute("cy", cy);
-
-              // Append the circle to the SVG canvas
-              svg.appendChild(circle);
-            }; */
-
-      /* const drawKuft = (startPoint, endPoint, offset = 10, reverse = false) => { 
-              console.log("startPoint", startPoint);
-              console.log("endPoint", endPoint);
-
-              const svg = document.getElementById("svgCanvas");
-
-              // Calculate midpoint between startPoint and endPoint
-              const midX = (startPoint.x + endPoint.x) / 2;
-              const midY = (startPoint.y + endPoint.y) / 2;
-
-              // Calculate the direction vector of the line
-              const dx = endPoint.x - startPoint.x;
-              const dy = endPoint.y - startPoint.y;
-
-              // Calculate the perpendicular offset direction (normal vector)
-              // Swap dx and dy, and negate one to get perpendicular direction
-              let offsetX = -dy;
-              let offsetY = dx;
-
-              // Normalize the perpendicular vector to ensure a consistent offset distance
-              const length = Math.sqrt(offsetX ** 2 + offsetY ** 2);
-              offsetX = (offsetX / length) * offset;
-              offsetY = (offsetY / length) * offset;
-
-              // Adjust for reverse direction if needed
-              if (reverse) {
-                offsetX = -offsetX;
-                offsetY = -offsetY;
-              }
-
-              // Calculate final position with offset
-              const cx = midX + offsetX;
-              const cy = midY + offsetY;
-
-              // Create and set attributes for the circle
-              let circle = document.createElementNS(
-                "http://www.w3.org/2000/svg",
-                "circle"
-              );
-              circle.setAttribute("r", 5);
-              circle.setAttribute("cx", cx);
-              circle.setAttribute("cy", cy);
-
-              // Append the circle to the SVG canvas
-              svg.appendChild(circle);
-            };
-*/
       const LINE_LENGTH = 50; // Set the desired length of the parallel line
       const TRIANGLE_HEIGHT = (Math.sqrt(3) / 2) * LINE_LENGTH; // Height of an equilateral triangle
-
-      // const drawKuft = (startPoint, endPoint, offset = 10, reverse = false) => {
-      //   console.log("startPoint", startPoint);
-      //   console.log("endPoint", endPoint);
-
-      //   const svg = document.getElementById("svgCanvas");
-
-      //   // Calculate midpoint between startPoint and endPoint
-      //   const midX = (startPoint.x + endPoint.x) / 2;
-      //   const midY = (startPoint.y + endPoint.y) / 2;
-
-      //   // Calculate the direction vector of the line
-      //   const dx = endPoint.x - startPoint.x;
-      //   const dy = endPoint.y - startPoint.y;
-
-      //   // Calculate the perpendicular offset direction (normal vector)
-      //   let offsetX = -dy;
-      //   let offsetY = dx;
-
-      //   // Normalize the perpendicular vector to ensure a consistent offset distance
-      //   const length = Math.sqrt(offsetX ** 2 + offsetY ** 2);
-      //   offsetX = (offsetX / length) * offset;
-      //   offsetY = (offsetY / length) * offset;
-
-      //   // Adjust for reverse direction if needed
-      //   if (reverse) {
-      //     offsetX = -offsetX;
-      //     offsetY = -offsetY;
-      //   }
-
-      //   // Calculate final position with offset
-      //   const cx = midX + offsetX;
-      //   const cy = midY + offsetY;
-
-      //   // Create and set attributes for the circle
-      //   let circle = document.createElementNS(
-      //     "http://www.w3.org/2000/svg",
-      //     "circle"
-      //   );
-      //   circle.setAttribute("r", 5);
-      //   circle.setAttribute("cx", cx);
-      //   circle.setAttribute("cy", cy);
-
-      //   // Append the circle to the SVG canvas
-      //   svg.appendChild(circle);
-
-      //   // Draw the parallel line
-      //   const parallelLength = LINE_LENGTH / 2; // Half length for each side from the center
-
-      //   // Calculate the endpoints of the parallel line
-      //   const parallelStartX =
-      //     cx - parallelLength * (dx / Math.sqrt(dx * dx + dy * dy));
-      //   const parallelStartY =
-      //     cy - parallelLength * (dy / Math.sqrt(dx * dx + dy * dy));
-
-      //   const parallelEndX =
-      //     cx + parallelLength * (dx / Math.sqrt(dx * dx + dy * dy));
-      //   const parallelEndY =
-      //     cy + parallelLength * (dy / Math.sqrt(dx * dx + dy * dy));
-
-      //   // Create and set attributes for the parallel line
-      //   let parallelLine = document.createElementNS(
-      //     "http://www.w3.org/2000/svg",
-      //     "line"
-      //   );
-      //   parallelLine.setAttribute("x1", parallelStartX);
-      //   parallelLine.setAttribute("y1", parallelStartY);
-      //   parallelLine.setAttribute("x2", parallelEndX);
-      //   parallelLine.setAttribute("y2", parallelEndY);
-      //   parallelLine.setAttribute("stroke", "black"); // Set line color
-
-      //   // Append the parallel line to the SVG canvas
-      //   svg.appendChild(parallelLine);
-
-      //   // Calculate the apex of the triangle (top vertex)
-      //   const apexX = cx; // x-coordinate remains the same as the circle
-      //   const apexY = cy - TRIANGLE_HEIGHT; // height goes up from the center of the base
-
-      //   // Draw the triangle sides
-      //   const leftLine = document.createElementNS(
-      //     "http://www.w3.org/2000/svg",
-      //     "line"
-      //   );
-      //   leftLine.setAttribute("x1", parallelStartX);
-      //   leftLine.setAttribute("y1", parallelStartY);
-      //   leftLine.setAttribute("x2", apexX);
-      //   leftLine.setAttribute("y2", apexY);
-      //   leftLine.setAttribute("stroke", "black"); // Set line color
-
-      //   const rightLine = document.createElementNS(
-      //     "http://www.w3.org/2000/svg",
-      //     "line"
-      //   );
-      //   rightLine.setAttribute("x1", parallelEndX);
-      //   rightLine.setAttribute("y1", parallelEndY);
-      //   rightLine.setAttribute("x2", apexX);
-      //   rightLine.setAttribute("y2", apexY);
-      //   rightLine.setAttribute("stroke", "black"); // Set line color
-
-      //   // Append the triangle sides to the SVG canvas
-      //   svg.appendChild(leftLine);
-      //   svg.appendChild(rightLine);
-      // };
 
       const drawKuft = (startPoint, endPoint, offset = 10, reverse = false) => {
         console.log("startPoint", startPoint);
@@ -264,17 +114,60 @@
         const cx = midX + offsetX;
         const cy = midY + offsetY;
 
-        // Create and set attributes for the circle
-        let circle = document.createElementNS(
+        // Draw the polygon instead of the circle
+        const polygon = document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "use"
+        );
+        const circle = document.createElementNS(
           "http://www.w3.org/2000/svg",
           "circle"
         );
-        circle.setAttribute("r", 5);
+
         circle.setAttribute("cx", cx);
         circle.setAttribute("cy", cy);
-
-        // Append the circle to the SVG canvas
+        circle.setAttribute("r", 5);
         svg.appendChild(circle);
+
+        // Calculate the angle of the line
+        const angle = Math.atan2(
+          endPoint.y - startPoint.y,
+          endPoint.x - startPoint.x
+        );
+
+        // Rotate the polygon to be perpendicular to the line
+        const rotationAngle = angle + Math.PI / 2; // 90 degrees in radians
+        polygon.setAttribute(
+          "transform",
+          `rotate(${rotationAngle * (180 / Math.PI)} ${cx} ${cy})`
+        );
+
+        // Get the bounding box
+        const tempPolygon = document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "use"
+        );
+        tempPolygon.setAttribute("href", "#myPolygon");
+        tempPolygon.setAttribute("transform", "scale(0.3)"); // Apply scale to match the actual polygon
+        svg.appendChild(tempPolygon); // Add it to the SVG to measure
+
+        const bbox = tempPolygon.getBBox();
+        console.log("bbox", bbox);
+
+        const scaledWidth = bbox.width; // Use the bounding box width
+        const scaledHeight = bbox.height; // Use the bounding box height
+
+        const centerX = cx - scaledWidth / 2; // Adjust x to center
+        const centerY = cy - scaledHeight / 2; // Adjust y to center
+
+        polygon.setAttribute("href", "#myPolygon");
+        polygon.setAttribute("x", centerX);
+        polygon.setAttribute("y", centerY);
+        polygon.setAttribute("fill", "blue"); // Set color for the polygon
+        polygon.classList.add("opacity-30");
+
+        // Append the polygon to the SVG canvas
+        svg.appendChild(polygon);
 
         // Draw the parallel line
         const parallelLength = LINE_LENGTH / 2; // Half length for each side from the center
@@ -312,66 +205,6 @@
         point.y = event.clientY;
         const svgPoint = point.matrixTransform(svg.getScreenCTM().inverse());
         return svgPoint;
-      }
-
-      // Function to draw the line between two points
-      function drawLine____Legacy(start, end) {
-        // Remove previous line and triangles if they exist
-        if (currentLine) svg.removeChild(currentLine);
-
-        // Draw the new line
-        currentLine = document.createElementNS(
-          "http://www.w3.org/2000/svg",
-          "line"
-        );
-        currentLine.setAttribute("class", "line");
-        currentLine.setAttribute("x1", start.x);
-        currentLine.setAttribute("y1", start.y);
-        currentLine.setAttribute("x2", end.x);
-        currentLine.setAttribute("y2", end.y);
-        svg.appendChild(currentLine);
-      }
-
-      // Function to draw the line between two points and mark start/end points
-      function drawLine__great(start, end) {
-        // Remove previous line and markers if they exist
-        // if (currentLine) svg.removeChild(currentLine);
-        //if (startMarker) svg.removeChild(startMarker);
-        //if (endMarker) svg.removeChild(endMarker);
-
-        // Draw the new line
-        currentLine = document.createElementNS(
-          "http://www.w3.org/2000/svg",
-          "line"
-        );
-        currentLine.setAttribute("class", "line");
-        currentLine.setAttribute("x1", start.x);
-        currentLine.setAttribute("y1", start.y);
-        currentLine.setAttribute("x2", end.x);
-        currentLine.setAttribute("y2", end.y);
-        svg.appendChild(currentLine);
-
-        // Draw a circle for the start point
-        let startMarker = document.createElementNS(
-          "http://www.w3.org/2000/svg",
-          "circle"
-        );
-        startMarker.setAttribute("class", "marker start-marker");
-        startMarker.setAttribute("cx", start.x);
-        startMarker.setAttribute("cy", start.y);
-        startMarker.setAttribute("r", 5);
-        svg.appendChild(startMarker);
-
-        // Draw a circle for the end point
-        let endMarker = document.createElementNS(
-          "http://www.w3.org/2000/svg",
-          "circle"
-        );
-        endMarker.setAttribute("class", "marker end-marker");
-        endMarker.setAttribute("cx", end.x);
-        endMarker.setAttribute("cy", end.y);
-        endMarker.setAttribute("r", 5);
-        svg.appendChild(endMarker);
       }
 
       // Function to draw the line between two points and mark start/end points
